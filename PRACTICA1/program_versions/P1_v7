@@ -1,0 +1,49 @@
+SIMULATE 1
+
+grupos FUNCTION RN1,D
+0.1 1
+0.4 2
+0.75 3
+0.95 4
+1 5
+trian FUNCTION RN1,C
+0 0.244
+1 0.264
+0.5 0.284
+exces FUNCTION RN1,D
+0.95 1
+1 2
+LET X$turn=0
+DRK CAPACITY 28
+	GENERATE fn$trian,0.1
+	IF fn$exces=1,cua
+	IF x$wait>40,end
+cua	LET P$group=FN$grupos
+	LET+ x$wait,P$group
+	ARRIVE Cola
+	LET+ x$cont,P$group
+	ENTER DRK,P$group
+	WAITIF Cic=U
+	LET+ x$gent,P$group
+	DEPART Cola
+	LET- x$wait,P$group
+	ADVANCE 2,0.5
+	LEAVE DRK,P$group
+end	TERMINATE 
+
+	GENERATE ,,,1
+Ciclo	ADVANCE 0.3,0.1
+	SEIZE Cic
+Tren	ADVANCE 1.5
+	RELEASE Cic
+	LET+ x$turn,1
+	MATRIX x$turn,1,x$wait
+	MATRIX x$turn,2,x$gent
+	LET x$gent=0
+	GOTO Ciclo
+
+	GENERATE 180
+	TERMINATE 1
+
+START 1
+END

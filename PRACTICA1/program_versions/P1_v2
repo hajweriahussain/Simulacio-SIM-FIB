@@ -1,0 +1,35 @@
+SIMULATE 1
+
+grupos FUNCTION RN1,D
+0.1 1
+0.4 2
+0.75 3
+0.95 4
+1 5
+DRK CAPACITY 28
+	GENERATE 0.114,0.1
+	LET P$group=FN$grupos
+	LET+ x$wait,P$group
+	ARRIVE Cola
+	LET+ x$cont,P$group
+	MATRIX 1,1,x$cont
+	ENTER DRK,P$group
+	WAITIF Cic=U
+	DEPART Cola
+	LET- x$wait,P$group
+	MATRIX x$wait,1,x$wait
+	ADVANCE 2,0.5
+	LEAVE DRK,P$group
+	TERMINATE 
+
+	GENERATE 180
+Ciclo	SEIZE Cic
+Tren	ADVANCE 2,0.5
+	RELEASE Cic
+	GOTO Ciclo
+
+	GENERATE 180
+	TERMINATE 1
+
+START 1
+END
